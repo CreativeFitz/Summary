@@ -20,8 +20,9 @@ namespace nucSummary.Models
 
         [Required]
         [Display(Name = "Account Creation Date")]
-        public int DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
 
+        
 
         public List<Courses> Courses { get; set; } = new List<Courses>();
 
