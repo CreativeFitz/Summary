@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,15 @@ namespace nucSummary.Controllers
     public class CoursesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public CoursesController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
+
+        //GET current signed-in user
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Courses
         [Authorize]
@@ -157,6 +162,38 @@ namespace nucSummary.Controllers
         private bool CoursesExists(int id)
         {
             return _context.Courses.Any(e => e.Id == id);
+        }
+        // GET: Reviews/Create
+        public IActionResult CreateReviews()
+        {
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id");
+            return View();
+        }
+
+        // POST: Reviews/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(int id, [Bind("Id,ApplicationUserId,CourseId,Difficulty,Content,Design,Assessments,Exercises,Relevancy,Overview")] Reviews reviews)
+        {
+            ModelState.Remove("ApplicationUserId");
+            ModelState.Remove("ApplicationUser");
+            ModelState.Remove("CourseId");
+            ModelState.Remove("Course");
+            var reviewsId = await _context.Reviews.FindAsync(id);
+            if (ModelState.IsValid)
+            {
+                var CurrentUser = await GetCurrentUserAsync();
+                reviews.ApplicationUserId = CurrentUser.Id;
+                _context.Add(reviews);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Details));
+            }
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", reviews.ApplicationUserId);
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", reviewsId.CourseId);
+            return View(reviews);
         }
     }
 }
