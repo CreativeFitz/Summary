@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,19 +14,32 @@ namespace nucSummary.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly ApplicationDbContext _context;
 
-        public CoursesController(ApplicationDbContext context)
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         // GET: Courses
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery)
         {
-            var applicationDbContext = _context.Courses.Include(c => c.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            ApplicationUser user = await GetCurrentUserAsync();
+            //Creating a course list to add serach queried courses
+            List<Courses> courseList = await _context.Courses
+                .ToListAsync();
+            //Adding all courses to courselist where the search query is found in a courses title//
+            if(searchQuery != null)
+            {
+                courseList = courseList.Where(course => course.Title.Contains(searchQuery)).ToList();
+            }
+            return View(courseList);
         }
 
         // GET: Courses/Details/5
@@ -63,6 +77,8 @@ namespace nucSummary.Controllers
         {
             if (ModelState.IsValid)
             {
+                ApplicationUser user = await GetCurrentUserAsync();
+                courses.ApplicationUserId = user.Id;
                 _context.Add(courses);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

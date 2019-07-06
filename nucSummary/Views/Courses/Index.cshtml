@@ -9,6 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form><input type="text" name="searchQuery"/><button type="submit">Search</button></form>
 <table class="table">
     <thead>
         <tr>
@@ -46,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.Host)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.Id)
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
