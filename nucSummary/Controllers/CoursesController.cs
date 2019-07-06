@@ -31,8 +31,10 @@ namespace nucSummary.Controllers
         public async Task<IActionResult> Index(string searchQuery)
         {
             ApplicationUser user = await GetCurrentUserAsync();
+            //Creating a course list to add serach queried courses
             List<Courses> courseList = await _context.Courses
                 .ToListAsync();
+            //Adding all courses to courselist where the search query is found in a courses title//
             if(searchQuery != null)
             {
                 courseList = courseList.Where(course => course.Title.Contains(searchQuery)).ToList();
