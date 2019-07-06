@@ -14,6 +14,7 @@ namespace nucSummary.Controllers
 {
     public class CoursesController : Controller
     {
+
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
@@ -27,10 +28,18 @@ namespace nucSummary.Controllers
 
         // GET: Courses
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery)
         {
-            var applicationDbContext = _context.Courses.Include(c => c.ApplicationUser);
-            return View(await applicationDbContext.ToListAsync());
+            ApplicationUser user = await GetCurrentUserAsync();
+            //Creating a course list to add serach queried courses
+            List<Courses> courseList = await _context.Courses
+                .ToListAsync();
+            //Adding all courses to courselist where the search query is found in a courses title//
+            if(searchQuery != null)
+            {
+                courseList = courseList.Where(course => course.Title.Contains(searchQuery)).ToList();
+            }
+            return View(courseList);
         }
 
         // GET: Courses/Details/5
@@ -60,7 +69,7 @@ namespace nucSummary.Controllers
         }
 
         // POST: Courses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -68,6 +77,8 @@ namespace nucSummary.Controllers
         {
             if (ModelState.IsValid)
             {
+                ApplicationUser user = await GetCurrentUserAsync();
+                courses.ApplicationUserId = user.Id;
                 _context.Add(courses);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -94,7 +105,7 @@ namespace nucSummary.Controllers
         }
 
         // POST: Courses/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -172,7 +183,7 @@ namespace nucSummary.Controllers
         }
 
         // POST: Reviews/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
