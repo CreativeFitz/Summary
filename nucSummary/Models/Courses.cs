@@ -35,5 +35,7 @@ namespace nucSummary.Models
 
         public List<CourseTags> CourseTags { get; set; } = new List<CourseTags>();
 
+        
+
     }
 }

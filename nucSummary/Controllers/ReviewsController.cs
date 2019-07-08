@@ -105,7 +105,7 @@ namespace nucSummary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ApplicationUserId,CourseId,Difficulty,Content,Design,Assessments,Exercises,Relevancy,Overview")] Reviews reviews)
+        public async Task<IActionResult> Edit(int? id, [Bind("Id,ApplicationUserId,CourseId,Difficulty,Content,Design,Assessments,Exercises,Relevancy,Overview")] Reviews reviews)
         {
             if (id != reviews.Id)
             {
@@ -168,7 +168,7 @@ namespace nucSummary.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ReviewsExists(int id)
+        private bool ReviewsExists(int? id)
         {
             return _context.Reviews.Any(e => e.Id == id);
         }

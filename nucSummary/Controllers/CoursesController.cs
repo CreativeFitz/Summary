@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using nucSummary.Data;
 using nucSummary.Models;
+
 
 namespace nucSummary.Controllers
 {
@@ -52,6 +54,7 @@ namespace nucSummary.Controllers
 
             var courses = await _context.Courses
                 .Include(c => c.ApplicationUser)
+                //.Include(c => c.Reviews)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (courses == null)
             {
@@ -187,7 +190,7 @@ namespace nucSummary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("Id,ApplicationUserId,CourseId,Difficulty,Content,Design,Assessments,Exercises,Relevancy,Overview")] Reviews reviews)
+        public async Task<IActionResult> CreateReviews(int id,  Reviews reviews)
         {
             ModelState.Remove("ApplicationUserId");
             ModelState.Remove("ApplicationUser");
@@ -198,9 +201,13 @@ namespace nucSummary.Controllers
             {
                 var CurrentUser = await GetCurrentUserAsync();
                 reviews.ApplicationUserId = CurrentUser.Id;
+                reviews.CourseId = id;
+                reviews.Id = null;
                 _context.Add(reviews);
+               
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Details));
+                return RedirectToAction("Details", new RouteValueDictionary(
+    new { controller = "Courses", action = "Details", Id = id }));
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", reviews.ApplicationUserId);
             ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", reviewsId.CourseId);
