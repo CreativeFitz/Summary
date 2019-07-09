@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20190708174911_AddingReviewsList.Designer.cs" />
     <Compile Remove="Migrations\20190708175037_AddedReviewsList.cs" />
     <Compile Remove="Migrations\20190708175037_AddedReviewsList.Designer.cs" />
+    <Compile Remove="Migrations\20190709023507_ReviewsList.cs" />
+    <Compile Remove="Migrations\20190709023507_ReviewsList.Designer.cs" />
   </ItemGroup>
 
 

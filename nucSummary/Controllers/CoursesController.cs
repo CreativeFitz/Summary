@@ -54,8 +54,10 @@ namespace nucSummary.Controllers
 
             var courses = await _context.Courses
                 .Include(c => c.ApplicationUser)
-                //.Include(c => c.Reviews)
+                .Include(r => r.Reviews)
+                    .ThenInclude(r =>r.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (courses == null)
             {
                 return NotFound();
