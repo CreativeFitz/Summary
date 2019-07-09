@@ -1,0 +1,63 @@
+﻿@model nucSummary.Models.Reviews
+
+@{
+    ViewData["Title"] = "CreateReviews";
+}
+
+<h1>CreateReviews</h1>
+
+<h4>Reviews</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateReviews">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Difficulty" class="control-label"></label>
+                <input asp-for="Difficulty" class="form-control" />
+                <span asp-validation-for="Difficulty" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Content" class="control-label"></label>
+                <input asp-for="Content" class="form-control" />
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Design" class="control-label"></label>
+                <input asp-for="Design" class="form-control" />
+                <span asp-validation-for="Design" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Assessments" class="control-label"></label>
+                <input asp-for="Assessments" class="form-control" />
+                <span asp-validation-for="Assessments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Exercises" class="control-label"></label>
+                <input asp-for="Exercises" class="form-control" />
+                <span asp-validation-for="Exercises" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Relevancy" class="control-label"></label>
+                <input asp-for="Relevancy" class="form-control" />
+                <span asp-validation-for="Relevancy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Overview" class="control-label"></label>
+                <input asp-for="Overview" class="form-control" />
+                <span asp-validation-for="Overview" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

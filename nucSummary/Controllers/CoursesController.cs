@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using nucSummary.Data;
 using nucSummary.Models;
+
 
 namespace nucSummary.Controllers
 {
@@ -17,13 +19,13 @@ namespace nucSummary.Controllers
 
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
         public CoursesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _context = context;
         }
 
+        //GET current signed-in user
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         // GET: Courses
@@ -52,7 +54,10 @@ namespace nucSummary.Controllers
 
             var courses = await _context.Courses
                 .Include(c => c.ApplicationUser)
+                .Include(r => r.Reviews)
+                    .ThenInclude(r =>r.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            
             if (courses == null)
             {
                 return NotFound();
@@ -69,7 +74,7 @@ namespace nucSummary.Controllers
         }
 
         // POST: Courses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -105,7 +110,7 @@ namespace nucSummary.Controllers
         }
 
         // POST: Courses/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -173,6 +178,42 @@ namespace nucSummary.Controllers
         private bool CoursesExists(int id)
         {
             return _context.Courses.Any(e => e.Id == id);
+        }
+        // GET: Reviews/Create
+        public IActionResult CreateReviews()
+        {
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id");
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id");
+            return View();
+        }
+
+        // POST: Reviews/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateReviews(int id,  Reviews reviews)
+        {
+            ModelState.Remove("ApplicationUserId");
+            ModelState.Remove("ApplicationUser");
+            ModelState.Remove("CourseId");
+            ModelState.Remove("Course");
+            var reviewsId = await _context.Reviews.FindAsync(id);
+            if (ModelState.IsValid)
+            {
+                var CurrentUser = await GetCurrentUserAsync();
+                reviews.ApplicationUserId = CurrentUser.Id;
+                reviews.CourseId = id;
+                reviews.Id = null;
+                _context.Add(reviews);
+               
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", new RouteValueDictionary(
+    new { controller = "Courses", action = "Details", Id = id }));
+            }
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", reviews.ApplicationUserId);
+            ViewData["CourseId"] = new SelectList(_context.Courses, "Id", "Id", reviewsId.CourseId);
+            return View(reviews);
         }
     }
 }
