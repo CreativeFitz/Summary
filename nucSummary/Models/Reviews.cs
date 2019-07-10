@@ -31,6 +31,8 @@ namespace nucSummary.Models
         public int Relevancy { get; set; }
         public string Overview { get; set; }
 
+        public DateTime DateAdded {get; set;}
+
         public ApplicationUser ApplicationUser { get; set; }
 
         public Courses Course { get; set; }
