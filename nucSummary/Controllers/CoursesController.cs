@@ -214,7 +214,7 @@ namespace nucSummary.Controllers
                 var CurrentUser = await GetCurrentUserAsync();
                 reviews.ApplicationUserId = CurrentUser.Id;
                 reviews.CourseId = id;
-                reviews.DateAdded = new DateTime (2008, 4, 1, 8, 30, 52);
+                reviews.DateAdded = DateTime.Now;
                 reviews.Id = null;
                 _context.Add(reviews);
                
