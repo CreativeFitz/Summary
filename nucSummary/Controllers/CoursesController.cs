@@ -51,13 +51,23 @@ namespace nucSummary.Controllers
             {
                 return NotFound();
             }
+            
 
             var courses = await _context.Courses
                 .Include(c => c.ApplicationUser)
                 .Include(r => r.Reviews)
-                    .ThenInclude(r =>r.ApplicationUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            
+                    .ThenInclude(r => r.ApplicationUser)
+                    // .OrderBy(r => r.Reviews.OrderBy)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
+            courses.Reviews = courses.Reviews.OrderByDescending(r => r.DateAdded.Date).ThenByDescending(c => c.DateAdded.TimeOfDay).ToList();
+            //courses.Reviews = new List<Reviews>();
+
+            //foreach ( var reviews in courses.Reviews)
+            //{
+            //    courses.Reviews.Add(reviews);
+            //}
+
             if (courses == null)
             {
                 return NotFound();
@@ -204,6 +214,7 @@ namespace nucSummary.Controllers
                 var CurrentUser = await GetCurrentUserAsync();
                 reviews.ApplicationUserId = CurrentUser.Id;
                 reviews.CourseId = id;
+                reviews.DateAdded = new DateTime (2008, 4, 1, 8, 30, 52);
                 reviews.Id = null;
                 _context.Add(reviews);
                
