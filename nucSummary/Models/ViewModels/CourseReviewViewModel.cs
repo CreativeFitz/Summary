@@ -7,7 +7,13 @@ namespace nucSummary.Models.ViewModels
 {
     public class CourseReviewViewModel
     {
+        
         public Courses Course { get; set; }
-        public List<Reviews> Reviews { get; set; }
+
+        public decimal OverallAverage { get; set; }
+
+        public float DifficultyAverage { get; set; }
+
+        public float RelevancyAverage { get; set; }
     }
 }

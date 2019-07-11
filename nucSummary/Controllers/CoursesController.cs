@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using nucSummary.Data;
 using nucSummary.Models;
-
+using nucSummary.Models.ViewModels;
 
 namespace nucSummary.Controllers
 {
@@ -53,14 +53,53 @@ namespace nucSummary.Controllers
             }
             
 
-            var courses = await _context.Courses
+
+            var course = await _context.Courses
                 .Include(c => c.ApplicationUser)
                 .Include(r => r.Reviews)
                     .ThenInclude(r => r.ApplicationUser)
                     // .OrderBy(r => r.Reviews.OrderBy)
                     .FirstOrDefaultAsync(m => m.Id == id);
 
-            courses.Reviews = courses.Reviews.OrderByDescending(r => r.DateAdded.Date).ThenByDescending(c => c.DateAdded.TimeOfDay).ToList();
+            course.Reviews = course.Reviews.OrderByDescending(r => r.DateAdded.Date).ThenByDescending(c => c.DateAdded.TimeOfDay).ToList();
+
+            decimal overallAverage = 0;
+            decimal numberOfReviews = 1;
+
+            foreach (Reviews rating in course.Reviews){
+                decimal average =
+                Convert.ToDecimal(((double)rating.Difficulty + rating.Content + rating.Design + rating.Assessments + rating.Exercises + rating.Relevancy) / 6);
+
+                overallAverage += average;
+
+
+                if (course.Reviews.Count != 0)
+                {
+                    numberOfReviews = course.Reviews.Count;
+                }
+               
+            };
+
+            decimal courseAverage = overallAverage / numberOfReviews ;
+
+            var viewModel = new CourseReviewViewModel()
+            {
+                Course = course,
+                OverallAverage = courseAverage
+            };
+
+
+
+            
+
+
+            //var viewModel = new CourseReviewViewModel() {
+
+            //}
+
+
+
+            
             //courses.Reviews = new List<Reviews>();
 
             //foreach ( var reviews in courses.Reviews)
@@ -68,12 +107,12 @@ namespace nucSummary.Controllers
             //    courses.Reviews.Add(reviews);
             //}
 
-            if (courses == null)
+            if (course == null)
             {
                 return NotFound();
             }
 
-            return View(courses);
+            return View(viewModel);
         }
 
         // GET: Courses/Create

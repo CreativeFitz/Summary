@@ -1,4 +1,4 @@
-﻿@model nucSummary.Models.Courses
+﻿@model nucSummary.Models.ViewModels.CourseReviewViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -11,33 +11,39 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Course.Title)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Course.Title)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Course.Description)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Course.Description)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Code)
+            @Html.DisplayNameFor(model => model.Course.Code)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Code)
+            @Html.DisplayFor(model => model.Course.Code)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Host)
+            @Html.DisplayNameFor(model => model.Course.Host)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Host)
+            @Html.DisplayFor(model => model.Course.Host)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.OverallAverage)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.OverallAverage)
         </dd>
     </dl>
     <h2>Reviews</h2>
     <div></div>
-    @foreach (var item in Model.Reviews)
+    @foreach (var item in Model.Course.Reviews)
     {
         <h5>
         @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
@@ -90,7 +96,7 @@
             }
     </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>|
-    <a asp-action="CreateReviews" asp-route-id="@Model.Id">Create a Review</a>|
+    <a asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</a>|
+    <a asp-action="CreateReviews" asp-route-id="@Model.Course.Id">Create a Review</a>|
     <a asp-action="Index">Back to List</a>
 </div>
