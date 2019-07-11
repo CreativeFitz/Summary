@@ -64,25 +64,23 @@ namespace nucSummary.Controllers
             course.Reviews = course.Reviews.OrderByDescending(r => r.DateAdded.Date).ThenByDescending(c => c.DateAdded.TimeOfDay).ToList();
 
             decimal overallAverage = 0;
+            decimal numberOfReviews = 1;
 
-            foreach(Reviews rating in course.Reviews){
-                decimal average = 
-               (rating.Difficulty + rating.Content + rating.Design + rating.Assessments + rating.Exercises + rating.Relevancy) / 6;
+            foreach (Reviews rating in course.Reviews){
+                decimal average =
+                Convert.ToDecimal(((double)rating.Difficulty + rating.Content + rating.Design + rating.Assessments + rating.Exercises + rating.Relevancy) / 6);
 
                 overallAverage += average;
 
-                decimal numberOfCourses = 0;
-                if (course.Reviews.Count == 0)
+
+                if (course.Reviews.Count != 0)
                 {
-                    numberOfCourses == 1;
+                    numberOfReviews = course.Reviews.Count;
                 }
-                else
-                {
-                    numberOfCourses == course.Reviews.Count;
-                }
+               
             };
 
-            decimal courseAverage = overallAverage / numberOfCourses ;
+            decimal courseAverage = overallAverage / numberOfReviews ;
 
             var viewModel = new CourseReviewViewModel()
             {
