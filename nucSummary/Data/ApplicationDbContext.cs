@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using nucSummary.Models;
+using nucSummary.Models.ViewModels;
 
 namespace nucSummary.Data
 {
@@ -22,6 +23,7 @@ namespace nucSummary.Data
         public DbSet<StudentCourses> StudentCourses { get; set; }
         public DbSet<Students> Students { get; set; }
         public DbSet<Tags> Tags { get; set; }
+        
 
     }
 }
