@@ -10,48 +10,27 @@
     <a asp-action="Create">Create New</a>
 </p>
 <form><input type="text" name="searchQuery"/><button type="submit">Search</button></form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Host)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Code)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Host)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="row">
+
+
+    @foreach (var item in Model)
+    {
+        <div class="col-sm-6">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(modelItem => item.Host)</h6>
+                    <p class="card-text col-2 text-truncate">@Html.DisplayFor(modelItem => item.Description)</p>
+                    <a class="card-link" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="card-link" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a class="card-link" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </div>
+            </div>
+            </div>
+
+
+            }
+        </div>
+
+
