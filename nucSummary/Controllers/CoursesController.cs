@@ -37,42 +37,49 @@ namespace nucSummary.Controllers
             List<Courses> courseList = await _context.Courses
                 .Include(c => c.Reviews)
                 .ToListAsync();
-
-            decimal overallAverage = 0;
             decimal numberOfReviews = 1;
-            decimal average = 0;
+            //Variable to store the average of all a single review's ratings on a course
+            decimal combinedRatingsAverage = 0;
+            //Variable to store the average of a Courses Review ratings
+            decimal overallAverage = 0;
+            
             List<CourseReviewViewModel> CourseVMList = new List<CourseReviewViewModel>();
 
             foreach (Courses course in courseList)
             {
+                //Setting overall average back to zero when the loop moves to the next course
+                overallAverage = 0;
                 foreach (Reviews review in course.Reviews)
                 {
-                    average =
+                    //Averaging together all the ratings in a review
+                    combinedRatingsAverage =
                     Convert.ToDecimal(((double)review.Difficulty + review.Content + review.Design + review.Assessments + review.Exercises + review.Relevancy) / 6);
 
-                    overallAverage += average;
+                    //The sum of all the reviews' averages 
+                    overallAverage += combinedRatingsAverage;
                     
 
 
 
-
-                    if (user.Reviews.Count != 0)
+                    //Creating the divisor for the total course average
+                    if (course.Reviews.Count != 0)
                     {
-                        numberOfReviews = user.Reviews.Count;
+                        numberOfReviews = course.Reviews.Count;
                     }
 
                     
                 }
                 
+                decimal courseAverage = overallAverage / numberOfReviews;
                 var viewModel = new CourseReviewViewModel()
                 {
                     Course = course,
-                    OverallAverage = average
+                    OverallAverage = courseAverage
                 };
                 CourseVMList.Add(viewModel);
             };
 
-            decimal courseAverage = overallAverage / numberOfReviews;
+
 
 
             //Adding all courses to courselist where the search query is found in a courses title//
@@ -80,7 +87,10 @@ namespace nucSummary.Controllers
             {
                 CourseVMList = CourseVMList.Where(courseVM => courseVM.Course.Title.Contains(searchQuery)).ToList();
             }
-            
+            if (filterQuery == "1")
+            {
+                CourseVMList = CourseVMList.OrderByDescending(cvm => cvm.OverallAverage).ToList();
+            }
 
 
             return View(CourseVMList);

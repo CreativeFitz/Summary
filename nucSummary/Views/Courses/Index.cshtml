@@ -34,6 +34,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.Course.Host)
             </th>
+            <th>
+                Overall Rating
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -53,7 +57,7 @@
                 @Html.DisplayFor(modelItem => item.Course.Host)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Course.ApplicationUser.UserName)
+                @Html.DisplayFor(modelItem => item.OverallAverage)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Course.Id">Edit</a> |
