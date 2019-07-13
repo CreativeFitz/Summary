@@ -14,8 +14,8 @@
     <select class="form-control" id="filterQuery" name="filterQuery">
         <option value="0" name="filterQuery"></option>
         <option value="1" name="filterQuery">Overall Rating</option>
-        @*<option value="2" name="filterQuery">Difficulty Rating</option>
-        <option value="3" name="filterQuery">Relevancy Rating</option>*@
+        <option value="2" name="filterQuery">Difficulty Rating</option>
+        @*<option value="3" name="filterQuery">Relevancy Rating</option>*@
     </select>
     <button type="submit" class="filter-button">Filter</button>
 </form>
@@ -36,6 +36,12 @@
             </th>
             <th>
                 Overall Rating
+            </th>
+            <th>
+                Difficulty Rating
+            </th>
+            <th>
+                Relevancy Rating
             </th>
 
             <th></th>
@@ -58,6 +64,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OverallAverage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DifficultyAverage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelevancyAverage)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Course.Id">Edit</a> |

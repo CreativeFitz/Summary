@@ -13,9 +13,9 @@ namespace nucSummary.Models.ViewModels
 
         public decimal OverallAverage { get; set; }
 
-        public float DifficultyAverage { get; set; }
+        public decimal DifficultyAverage { get; set; }
 
-        public float RelevancyAverage { get; set; }
+        public decimal RelevancyAverage { get; set; }
 
         
     }

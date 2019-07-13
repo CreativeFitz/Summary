@@ -40,20 +40,34 @@ namespace nucSummary.Controllers
             decimal numberOfReviews = 1;
             //Variable to store the average of all a single review's ratings on a course
             decimal combinedRatingsAverage = 0;
+            //Variable to store all of the Difficulty ratings of the Courses reviews
+            decimal singleDifficultyRatingAvg = 0;
+            //Variable to store all of the Difficulty ratings of the Courses reviews
+            decimal singleRelevancyRatingAvg = 0;
+
             //Variable to store the average of a Courses Review ratings
             decimal overallAverage = 0;
+            
+            
+            
             
             List<CourseReviewViewModel> CourseVMList = new List<CourseReviewViewModel>();
 
             foreach (Courses course in courseList)
             {
-                //Setting overall average back to zero when the loop moves to the next course
+                //Setting averages back to zero when the loop moves to the next course
                 overallAverage = 0;
+                singleDifficultyRatingAvg = 0;
+                singleRelevancyRatingAvg = 0;
                 foreach (Reviews review in course.Reviews)
                 {
                     //Averaging together all the ratings in a review
                     combinedRatingsAverage =
                     Convert.ToDecimal(((double)review.Difficulty + review.Content + review.Design + review.Assessments + review.Exercises + review.Relevancy) / 6);
+
+                    singleDifficultyRatingAvg += Convert.ToDecimal((double)review.Difficulty);
+
+                    singleRelevancyRatingAvg += Convert.ToDecimal((double)review.Relevancy);
 
                     //The sum of all the reviews' averages 
                     overallAverage += combinedRatingsAverage;
@@ -70,11 +84,20 @@ namespace nucSummary.Controllers
                     
                 }
                 
+
                 decimal courseAverage = overallAverage / numberOfReviews;
+                //Variable to store the average of all the Difficulty ratings of a course.
+                decimal difficultyRatingAvg = singleDifficultyRatingAvg / numberOfReviews;
+                //Variable to store the average of all the Difficulty ratings of a course.
+                decimal relevancyRatingAvg = singleRelevancyRatingAvg / numberOfReviews;
+
+
                 var viewModel = new CourseReviewViewModel()
                 {
                     Course = course,
-                    OverallAverage = courseAverage
+                    OverallAverage = courseAverage,
+                    DifficultyAverage = difficultyRatingAvg,
+                    RelevancyAverage = relevancyRatingAvg
                 };
                 CourseVMList.Add(viewModel);
             };
