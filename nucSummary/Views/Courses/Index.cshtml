@@ -1,4 +1,4 @@
-﻿@model IEnumerable<nucSummary.Models.Courses>
+﻿@model IEnumerable<nucSummary.Models.ViewModels.CourseReviewViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,20 +10,29 @@
     <a asp-action="Create">Create New</a>
 </p>
 <form><input type="text" name="searchQuery"/><button type="submit">Search</button></form>
+<form class="filter">
+    <select class="form-control" id="filterQuery" name="filterQuery">
+        <option value="0" name="filterQuery"></option>
+        <option value="1" name="filterQuery">Overall Rating</option>
+        @*<option value="2" name="filterQuery">Difficulty Rating</option>
+        <option value="3" name="filterQuery">Relevancy Rating</option>*@
+    </select>
+    <button type="submit" class="filter-button">Filter</button>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Course.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Course.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Code)
+                @Html.DisplayNameFor(model => model.Course.Code)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Host)
+                @Html.DisplayNameFor(model => model.Course.Host)
             </th>
             <th></th>
         </tr>
@@ -32,24 +41,24 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                @Html.DisplayFor(modelItem => item.Course.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Course.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Code)
+                @Html.DisplayFor(modelItem => item.Course.Code)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Host)
+                @Html.DisplayFor(modelItem => item.Course.Host)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+                @Html.DisplayFor(modelItem => item.Course.ApplicationUser.UserName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Course.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Course.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Course.Id">Delete</a>
             </td>
         </tr>
 }

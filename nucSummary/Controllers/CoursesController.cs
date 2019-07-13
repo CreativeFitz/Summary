@@ -30,18 +30,60 @@ namespace nucSummary.Controllers
 
         // GET: Courses
         [Authorize]
-        public async Task<IActionResult> Index(string searchQuery)
+        public async Task<IActionResult> Index(string searchQuery, string filterQuery)
         {
             ApplicationUser user = await GetCurrentUserAsync();
             //Creating a course list to add serach queried courses
             List<Courses> courseList = await _context.Courses
+                .Include(c => c.Reviews)
                 .ToListAsync();
-            //Adding all courses to courselist where the search query is found in a courses title//
-            if(searchQuery != null)
+
+            decimal overallAverage = 0;
+            decimal numberOfReviews = 1;
+            decimal average = 0;
+            List<CourseReviewViewModel> CourseVMList = new List<CourseReviewViewModel>();
+
+            foreach (Courses course in courseList)
             {
-                courseList = courseList.Where(course => course.Title.Contains(searchQuery)).ToList();
+                foreach (Reviews review in course.Reviews)
+                {
+                    average =
+                    Convert.ToDecimal(((double)review.Difficulty + review.Content + review.Design + review.Assessments + review.Exercises + review.Relevancy) / 6);
+
+                    overallAverage += average;
+                    
+
+
+
+
+                    if (user.Reviews.Count != 0)
+                    {
+                        numberOfReviews = user.Reviews.Count;
+                    }
+
+                    
+                }
+                
+                var viewModel = new CourseReviewViewModel()
+                {
+                    Course = course,
+                    OverallAverage = average
+                };
+                CourseVMList.Add(viewModel);
+            };
+
+            decimal courseAverage = overallAverage / numberOfReviews;
+
+
+            //Adding all courses to courselist where the search query is found in a courses title//
+            if (searchQuery != null)
+            {
+                CourseVMList = CourseVMList.Where(courseVM => courseVM.Course.Title.Contains(searchQuery)).ToList();
             }
-            return View(courseList);
+            
+
+
+            return View(CourseVMList);
         }
 
         // GET: Courses/Details/5
@@ -87,26 +129,6 @@ namespace nucSummary.Controllers
                 Course = course,
                 OverallAverage = courseAverage
             };
-
-
-
-            
-
-
-            //var viewModel = new CourseReviewViewModel() {
-
-            //}
-
-
-
-            
-            //courses.Reviews = new List<Reviews>();
-
-            //foreach ( var reviews in courses.Reviews)
-            //{
-            //    courses.Reviews.Add(reviews);
-            //}
-
             if (course == null)
             {
                 return NotFound();
