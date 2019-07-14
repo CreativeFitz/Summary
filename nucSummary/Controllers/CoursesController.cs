@@ -110,10 +110,20 @@ namespace nucSummary.Controllers
             {
                 CourseVMList = CourseVMList.Where(courseVM => courseVM.Course.Title.Contains(searchQuery)).ToList();
             }
+            //Ordering by drop down selection.
             if (filterQuery == "1")
             {
                 CourseVMList = CourseVMList.OrderByDescending(cvm => cvm.OverallAverage).ToList();
             }
+            if (filterQuery == "2")
+            {
+                CourseVMList = CourseVMList.OrderByDescending(cvm => cvm.DifficultyAverage).ToList();
+            }
+            if (filterQuery == "3")
+            {
+                CourseVMList = CourseVMList.OrderByDescending(cvm => cvm.RelevancyAverage).ToList();
+            }
+
 
 
             return View(CourseVMList);
