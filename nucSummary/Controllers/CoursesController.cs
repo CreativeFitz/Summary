@@ -30,18 +30,103 @@ namespace nucSummary.Controllers
 
         // GET: Courses
         [Authorize]
-        public async Task<IActionResult> Index(string searchQuery)
+        public async Task<IActionResult> Index(string searchQuery, string filterQuery)
         {
             ApplicationUser user = await GetCurrentUserAsync();
             //Creating a course list to add serach queried courses
             List<Courses> courseList = await _context.Courses
+                .Include(c => c.Reviews)
                 .ToListAsync();
-            //Adding all courses to courselist where the search query is found in a courses title//
-            if(searchQuery != null)
+            decimal numberOfReviews = 1;
+            //Variable to store the average of all a single review's ratings on a course
+            decimal combinedRatingsAverage = 0;
+            //Variable to store all of the Difficulty ratings of the Courses reviews
+            decimal singleDifficultyRatingAvg = 0;
+            //Variable to store all of the Difficulty ratings of the Courses reviews
+            decimal singleRelevancyRatingAvg = 0;
+
+            //Variable to store the average of a Courses Review ratings
+            decimal overallAverage = 0;
+            
+            
+            
+            
+            List<CourseReviewViewModel> CourseVMList = new List<CourseReviewViewModel>();
+
+            foreach (Courses course in courseList)
             {
-                courseList = courseList.Where(course => course.Title.Contains(searchQuery)).ToList();
+                //Setting averages back to zero when the loop moves to the next course
+                overallAverage = 0;
+                singleDifficultyRatingAvg = 0;
+                singleRelevancyRatingAvg = 0;
+                foreach (Reviews review in course.Reviews)
+                {
+                    //Averaging together all the ratings in a review
+                    combinedRatingsAverage =
+                    Convert.ToDecimal(((double)review.Difficulty + review.Content + review.Design + review.Assessments + review.Exercises + review.Relevancy) / 6);
+
+                    singleDifficultyRatingAvg += Convert.ToDecimal((double)review.Difficulty);
+
+                    singleRelevancyRatingAvg += Convert.ToDecimal((double)review.Relevancy);
+
+                    //The sum of all the reviews' averages 
+                    overallAverage += combinedRatingsAverage;
+                    
+
+
+
+                    //Creating the divisor for the total course average
+                    if (course.Reviews.Count != 0)
+                    {
+                        numberOfReviews = course.Reviews.Count;
+                    }
+
+                    
+                }
+                
+
+                decimal courseAverage = overallAverage / numberOfReviews;
+                //Variable to store the average of all the Difficulty ratings of a course.
+                decimal difficultyRatingAvg = singleDifficultyRatingAvg / numberOfReviews;
+                //Variable to store the average of all the Difficulty ratings of a course.
+                decimal relevancyRatingAvg = singleRelevancyRatingAvg / numberOfReviews;
+
+
+                var viewModel = new CourseReviewViewModel()
+                {
+                    Course = course,
+                    OverallAverage = courseAverage,
+                    DifficultyAverage = difficultyRatingAvg,
+                    RelevancyAverage = relevancyRatingAvg
+                };
+                CourseVMList.Add(viewModel);
+            };
+
+
+
+
+            //Adding all courses to courselist where the search query is found in a courses title//
+            if (searchQuery != null)
+            {
+                CourseVMList = CourseVMList.Where(courseVM => courseVM.Course.Title.Contains(searchQuery)).ToList();
             }
-            return View(courseList);
+            //Ordering by drop down selection//
+            if (filterQuery == "1")
+            {
+                CourseVMList = CourseVMList.OrderByDescending(cvm => cvm.OverallAverage).ToList();
+            }
+            if (filterQuery == "2")
+            {
+                CourseVMList = CourseVMList.OrderByDescending(cvm => cvm.DifficultyAverage).ToList();
+            }
+            if (filterQuery == "3")
+            {
+                CourseVMList = CourseVMList.OrderByDescending(cvm => cvm.RelevancyAverage).ToList();
+            }
+
+
+
+            return View(CourseVMList);
         }
 
         // GET: Courses/Details/5
@@ -87,26 +172,6 @@ namespace nucSummary.Controllers
                 Course = course,
                 OverallAverage = courseAverage
             };
-
-
-
-            
-
-
-            //var viewModel = new CourseReviewViewModel() {
-
-            //}
-
-
-
-            
-            //courses.Reviews = new List<Reviews>();
-
-            //foreach ( var reviews in courses.Reviews)
-            //{
-            //    courses.Reviews.Add(reviews);
-            //}
-
             if (course == null)
             {
                 return NotFound();
