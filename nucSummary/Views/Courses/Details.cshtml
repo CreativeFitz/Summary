@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Html.DisplayFor(model => model.Course.Title)</h1>
 
 <div>
     <h4>Courses</h4>
@@ -35,7 +35,7 @@
             @Html.DisplayFor(model => model.Course.Host)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.OverallAverage)
+           Overall Average
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.OverallAverage)
@@ -45,9 +45,9 @@
     <div></div>
     @foreach (var item in Model.Course.Reviews)
     {
-        <h5>
+        <h3><ins>
         @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
-        </h5>
+        </ins></h3>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">
@@ -96,7 +96,7 @@
             }
     </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</a>|
-    <a asp-action="CreateReviews" asp-route-id="@Model.Course.Id">Create a Review</a>|
-    <a asp-action="Index">Back to List</a>
+    <button type="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</button>|
+    <button type="button" class="btn btn-primary" asp-action="CreateReviews" asp-route-id="@Model.Course.Id">Create a Review</button>|
+    <button type="button" class="btn btn-secondary"  asp-action="Index">Back to List</button>
 </div>
