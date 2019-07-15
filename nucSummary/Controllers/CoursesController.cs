@@ -253,6 +253,9 @@ namespace nucSummary.Controllers
                         throw;
                     }
                 }
+                ApplicationUser user = await GetCurrentUserAsync();
+                courses.ApplicationUserId = user.Id;
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUser, "Id", "Id", courses.ApplicationUserId);
