@@ -96,7 +96,7 @@
             }
     </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</a>|
-    <a asp-action="CreateReviews" asp-route-id="@Model.Course.Id">Create a Review</a>|
+    <button type="button" class="btn btn-secondary" asp-action="Edit" asp-route-id="@Model.Course.Id">Edit</button>|
+    <button type="button" class="btn btn-primary" asp-action="CreateReviews" asp-route-id="@Model.Course.Id">Create a Review</button>|
     <a asp-action="Index">Back to List</a>
 </div>
