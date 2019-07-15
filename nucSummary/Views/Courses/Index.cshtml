@@ -4,12 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Course Library</h1>
 
 
-<form class="filter">
-    <input type="text" name="searchQuery" placeholder="Enter search value" />
-    <select class="form-control" id="filterQuery" name="filterQuery">
+<form class="filter form-inline">
+    <input type="text" class="form-control mr-sm-2" name="searchQuery" placeholder="Enter search value" />
+    <select class="form-control mr-sm-2" id="filterQuery" name="filterQuery">
         <option value="0" name="filterQuery">Please select what you want to order by!</option>
         <option value="1" name="filterQuery">Overall Rating</option>
         <option value="2" name="filterQuery">Difficulty Rating</option>
