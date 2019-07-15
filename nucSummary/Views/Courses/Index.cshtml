@@ -6,12 +6,9 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <form class="filter">
     <input type="text" name="searchQuery" placeholder="Enter search value" />
-
     <select class="form-control" id="filterQuery" name="filterQuery">
         <option value="0" name="filterQuery">Please select what you want to order by!</option>
         <option value="1" name="filterQuery">Overall Rating</option>
@@ -30,10 +27,10 @@
                 @Html.DisplayNameFor(model => model.Course.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Course.Code)
+                @Html.DisplayNameFor(model => model.Course.Host)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Course.Host)
+                @Html.DisplayNameFor(model => model.Course.Code)
             </th>
             <th>
                 Overall Rating
@@ -58,10 +55,10 @@
                 @Html.DisplayFor(modelItem => item.Course.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Course.Code)
+                @Html.DisplayFor(modelItem => item.Course.Host)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Course.Host)
+                @Html.DisplayFor(modelItem => item.Course.Code)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OverallAverage)
@@ -74,8 +71,7 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Course.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Course.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Course.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Course.Id">Details</a> 
             </td>
         </tr>
 }
