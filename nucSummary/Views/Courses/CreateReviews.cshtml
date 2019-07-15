@@ -13,7 +13,7 @@
         <form asp-action="CreateReviews">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Difficulty" class="control-label"></label>
+                <label asp-for="Difficulty" class="control-label">Difficulty - How easy was it to understand the content?</label>
                 <div class="form-group">
                     <select asp-for="Difficulty" id="Difficulty">
                         <option value="1">1</option>
@@ -26,7 +26,7 @@
                 <span asp-validation-for="Difficulty" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
+                <label asp-for="Content" class="control-label">Content - Did you feel the content was well thought out and delivered in a concise manner?</label>
                 <div class="form-group">
                     <select asp-for="Content" id="Content">
                         <option value="1">1</option>
@@ -39,7 +39,7 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Design" class="control-label"></label>
+                <label asp-for="Design" class="control-label">Design - Did the course use effective visuals and animations to help with the rate of learning?</label>
                 <div class="form-group">
                     <select asp-for="Design" id="Design">
                         <option value="1">1</option>
@@ -52,7 +52,7 @@
                 <span asp-validation-for="Design" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Assessments" class="control-label"></label>
+                <label asp-for="Assessments" class="control-label">Assessments - Did the course assessments or quizzes evaluate material that was important?</label>
                 <div class="form-group">
                     <select asp-for="Assessments" id="Assessments">
                         <option value="1">1</option>
@@ -65,7 +65,7 @@
                 <span asp-validation-for="Assessments" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Exercises" class="control-label"></label>
+                <label asp-for="Exercises" class="control-label">Exercises - Did the exercises help further your learning of the course material?</label>
                 <div class="form-group">
                     <select asp-for="Exercises" id="Exercises">
                         <option value="1">1</option>
@@ -78,7 +78,7 @@
                 <span asp-validation-for="Exercises" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Relevancy" class="control-label"></label>
+                <label asp-for="Relevancy" class="control-label">Relevancy - Did the course seem relevant to the title and course description?</label>
                 <div class="form-group">
                     <select asp-for="Relevancy" id="Relevancy">
                         <option value="1">1</option>
